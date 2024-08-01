@@ -1,0 +1,13 @@
+<resources>
+    <layout id="WatchFace">
+        <drawable id="Background" class="WatchUi.Bitmap">
+            <param name="locX">0</param>
+            <param name="locY">0</param>
+            <param name="rezId">@Drawables.background</param>
+        </drawable>
+        <label id="TimeLabel" x="222" y="110" font="Graphics.FONT_LARGE" justification="Graphics.TEXT_JUSTIFY_CENTER" color="#aaeeaa" />
+        <label id="TimeDelta" x="center" y="10" font="Graphics.FONT_LARGE" justification="Graphics.TEXT_JUSTIFY_CENTER" color="Graphics.COLOR_GREEN" />
+        <label id="CurrentDay" x="22" y="119" font="Graphics.FONT_GLANCE" justification="Graphics.TEXT_JUSTIFY_CENTER" color="#557755" />
+        <label id="CurrentDayName" x="139" y="119" font="Graphics.FONT_GLANCE" justification="Graphics.TEXT_JUSTIFY_CENTER" color="#557755" />
+    </layout>
+</resources>

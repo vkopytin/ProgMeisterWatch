@@ -1,0 +1,14 @@
+/bin/
+/internal-mir/
+/mir/
+/dist/
+
+*.prg
+*.debug.xml
+*.kra
+*.kra~
+*.png~
+
+.DS_Store
+CIQ_LOG.BAK
+CIQ_LOG.YML
