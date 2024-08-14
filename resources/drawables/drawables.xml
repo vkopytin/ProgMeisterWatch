@@ -1,7 +1,9 @@
 <drawables>
     <bitmap id="LauncherIcon" filename="launcher_icon.png" />
-    <bitmap id="SecondHand" filename="secondhand-15x125.png"/>
+    <bitmap id="SecondHand" filename="secondhand.png"/>
     <bitmap id="HourHand" filename="hourhand.png"/>
     <bitmap id="MinuteHand" filename="minutehand.png"/>
     <bitmap id="background" filename="background.png"/>
+    <bitmap id="CompassNeedle" filename="compassneedle.png" automaticPalette="false"/>
+    <bitmap id="BarometerScale" filename="barometerscale.png" automaticPalette="false"/>
 </drawables>

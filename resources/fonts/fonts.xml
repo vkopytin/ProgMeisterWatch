@@ -1,3 +1,10 @@
 <fonts>
-	<font id="weather" filename="weather.fntc" antialias="true"/>
+	<font id="WeatherFont" filename="weather-icons-24.fnt" antialias="true"></font>
+    <font id="id_symbols" filename="Symbols.fnt" filter="ABCDEFGHIJKLMNabcdefghijklmnopqrstuvwxyz{|}" antialias="true" />
+    <font id="system12" filename="system-12.fnt" antialias="true" />
+    <font id="lcdDisplay12" filename="lcd-display-12.fnt" antialias="true" />
+    <font id="lcdDisplay9" filename="lcd-display-9.fnt" antialias="true" />
+    <font id="lcdDisplayBig" filename="lcdDisplayBig.fnt" antialias="true" />
+    <font id="lcdDisplay" filename="clock2.fnt" antialias="true" />
+    <font id="smadigi2" filename="smadigi2.fnt" antialias="true" />
 </fonts>

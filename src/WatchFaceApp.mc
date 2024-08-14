@@ -1,6 +1,7 @@
 import Toybox.Application;
 import Toybox.Lang;
 import Toybox.WatchUi;
+import Toybox.Complications;
 
 class WatchFaceApp extends Application.AppBase {
 

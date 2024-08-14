@@ -5,9 +5,45 @@
             <param name="locY">0</param>
             <param name="rezId">@Drawables.background</param>
         </drawable>
-        <label id="TimeLabel" x="222" y="110" font="Graphics.FONT_LARGE" justification="Graphics.TEXT_JUSTIFY_CENTER" color="#aaeeaa" />
-        <label id="TimeDelta" x="center" y="10" font="Graphics.FONT_LARGE" justification="Graphics.TEXT_JUSTIFY_CENTER" color="Graphics.COLOR_GREEN" />
-        <label id="CurrentDay" x="22" y="119" font="Graphics.FONT_GLANCE" justification="Graphics.TEXT_JUSTIFY_CENTER" color="#557755" />
-        <label id="CurrentDayName" x="139" y="119" font="Graphics.FONT_GLANCE" justification="Graphics.TEXT_JUSTIFY_CENTER" color="#557755" />
+        <label id="TimeLabel" x="222" y="110" color="#aaeeaa" font="Graphics.FONT_LARGE" justification="Graphics.TEXT_JUSTIFY_CENTER" />
+        <label id="TimeSeparator" x="221" y="110" color="#aaeeaa" font="Graphics.FONT_LARGE" justification="Graphics.TEXT_JUSTIFY_CENTER" />
+        <label id="CurrentDay" x="22" y="119" color="#557755" font="Graphics.FONT_GLANCE" justification="Graphics.TEXT_JUSTIFY_CENTER" />
+        <label id="CurrentDayName" x="139" y="119" color="#557755" font="Graphics.FONT_GLANCE" justification="Graphics.TEXT_JUSTIFY_CENTER" />
+        <label id="AMPM" x="54" y="118" color="Graphics.COLOR_DK_GRAY" font="Graphics.FONT_GLANCE" justification="Graphics.TEXT_JUSTIFY_CENTER" />
+        <label id="HeartRate" x="156" y="167" color="Graphics.COLOR_LT_GRAY" font="Graphics.FONT_GLANCE" justification="Graphics.TEXT_JUSTIFY_LEFT" />
+        <label id="HeartIcon" x="146" y="175" color="Graphics.COLOR_LT_GRAY" font="@Fonts.system12" text="\u0039" justification="Graphics.TEXT_JUSTIFY_CENTER" />
+        <label id="lcdDisplayBig" x="226" y="118" color="Graphics.COLOR_DK_GRAY" font="@Fonts.lcdDisplayBig"
+          text="AAAAA" justification="Graphics.TEXT_JUSTIFY_CENTER" />
+        <label id="Steps" x="140" y="190" text="0000" color="Graphics.COLOR_LT_GRAY" font="Graphics.FONT_SYSTEM_XTINY" justification="Graphics.TEXT_JUSTIFY_CENTER" />
+        <drawable id="BatteryLabel" class="BatteryView">
+            <param name="locX">65</param>
+            <param name="locY">74</param>
+            <param name="width">40</param>
+            <param name="height">40</param>
+            <param name="fontSize">Graphics.FONT_XTINY</param>
+            <param name="fontColor">Graphics.COLOR_LT_GRAY</param>
+        </drawable>
+        <drawable id="SunRiseSunSet" class="SunRiseSunSetView">
+            <param name="locX">110</param>
+            <param name="locY">0</param>
+            <param name="width">30</param>
+            <param name="height">50</param>
+            <param name="fontSize">Graphics.FONT_SYSTEM_XTINY</param>
+            <param name="fontColor">Graphics.COLOR_LT_GRAY</param>
+        </drawable>
+        <drawable id="bGraphDisplay" class="GraphView">
+            <param name="locX">170</param>
+            <param name="locY">60</param>
+            <param name="dataType">1</param>
+            <param name="width">90</param>
+            <param name="height">30</param>
+        </drawable>
+        <drawable id="graphPixelView" class="GraphPixelView">
+            <param name="locX">190</param>
+            <param name="locY">200</param>
+            <param name="dataType">3</param>
+            <param name="width">40</param>
+            <param name="height">20</param>
+        </drawable>
     </layout>
 </resources>
