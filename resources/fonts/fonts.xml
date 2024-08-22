@@ -7,4 +7,5 @@
     <font id="lcdDisplayBig" filename="lcdDisplayBig.fnt" antialias="true" />
     <font id="lcdDisplay" filename="clock2.fnt" antialias="true" />
     <font id="smadigi2" filename="smadigi2.fnt" antialias="true" />
+    <font id="lcdDisplayBig2" filename="lcdDisplayBig2.fnt" antialias="true" />
 </fonts>

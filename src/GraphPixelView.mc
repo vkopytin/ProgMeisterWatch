@@ -19,28 +19,32 @@ class GraphPixelView extends Ui.Drawable {
     var gbar_color_back = 0x550000;
     var gbar_color_0 = 0xFFFF00;
     var gbar_color_1 = 0x0000FF;
+	var graphColor = 0x555555;
+	var fontColor = 0xaaffaa;
 
     hidden var position = 1;
-    hidden var position_x, position_y;
-    hidden var graph_width, graph_height;
     var centerX = 166;
     var centerY = 36;
     var settings;
 
     var smallDigitalFont = WatchUi.loadResource(Rez.Fonts.lcdDisplay);
     var dataType = 1;
+	private var lastBuffer = null as Graphics.BufferedBitmap;
+	private var lastTime = null as Toybox.Time.Moment;
+
+	function setLastBuffer(buffer as Graphics.BufferedBitmap) {
+		if (self.lastBuffer != null) {
+			self.lastBuffer.getDc().clear();
+		}
+		self.lastBuffer = buffer;
+	}
 
     function initialize(params) {
     	Drawable.initialize(params);
 
         self.dataType = params.get(:dataType);
-    	position_x = params.get(:locX);
-    	position_y = params.get(:locY);
-        self.width = params.get(:width);
-        self.height = params.get(:height);
-
-    	graph_width = self.width;
-    	graph_height = self.height;
+		self.graphColor = params.get(:graphColor);
+		self.fontColor = params.get(:fontColor);
     }
 
 	function get_data_type() {
@@ -96,11 +100,19 @@ class GraphPixelView extends Ui.Drawable {
     }
 
     function draw(dc) {
+		var buffer = null as Graphics.BufferedBitmap;
+		var bufferdc = null as Graphics.Dc;
+
     	if (!need_draw()) {
     		return;
     	}
 
     	try {
+			buffer = Graphics.createBufferedBitmap({
+				:width=>dc.getWidth(),
+				:height=>dc.getHeight(),
+			}).get();
+			bufferdc = buffer.getDc();
 	    	settings = System.getDeviceSettings();
 
 			var primaryColor = position == 0 ? gbar_color_1 : gbar_color_0;
@@ -110,18 +122,20 @@ class GraphPixelView extends Ui.Drawable {
 	        var HistoryIter = get_data_interator(targetdatatype);
 
 	        if (HistoryIter == null) {
-	        	dc.setColor(gmain_color, Graphics.COLOR_TRANSPARENT);
-	        	dc.drawText(position_x, position_y, smallDigitalFont, "--", Graphics.TEXT_JUSTIFY_CENTER|Graphics.TEXT_JUSTIFY_VCENTER);
-                return;
+	        	bufferdc.setColor(self.fontColor, Graphics.COLOR_TRANSPARENT);
+	        	bufferdc.drawText(self.locX, self.locY, smallDigitalFont, "--", Graphics.TEXT_JUSTIFY_CENTER|Graphics.TEXT_JUSTIFY_VCENTER);
+                self.setLastBuffer(buffer);
+				return;
 	        }
 
 	        var HistoryMin = HistoryIter.getMin();
 	        var HistoryMax = HistoryIter.getMax();
 
 	        if (HistoryMin == null || HistoryMax == null) {
-	        	dc.setColor(gmain_color, Graphics.COLOR_TRANSPARENT);
-	        	dc.drawText(position_x, position_y, smallDigitalFont, "--", Graphics.TEXT_JUSTIFY_CENTER|Graphics.TEXT_JUSTIFY_VCENTER);
-                return;
+	        	bufferdc.setColor(self.fontColor, Graphics.COLOR_TRANSPARENT);
+	        	bufferdc.drawText(self.locX, self.locY, smallDigitalFont, "--", Graphics.TEXT_JUSTIFY_CENTER|Graphics.TEXT_JUSTIFY_VCENTER);
+                self.setLastBuffer(buffer);
+				return;
 	        }
 	//         else if (HistoryMin.data == null || HistoryMax.data == null) {
 	//        	bufferdc.setColor(gmain_color, Graphics.COLOR_TRANSPARENT);
@@ -131,8 +145,8 @@ class GraphPixelView extends Ui.Drawable {
 
 	        var minMaxDiff = (HistoryMax - HistoryMin).toFloat();
 
-	        var xStep = graph_width;
-	        var height = graph_height;
+	        var xStep = self.width;
+	        var height = self.height;
 	        var HistoryPresent = 0;
 
 			var HistoryNew = 0;
@@ -142,6 +156,15 @@ class GraphPixelView extends Ui.Drawable {
 
 			var latest_sample = HistoryIter.next();
 			if (latest_sample != null) {
+				if (self.lastTime == null) {
+					self.lastTime = latest_sample.when;
+				}
+				var timeDiff = latest_sample.when.compare(self.lastTime);
+				if (timeDiff < 10 && self.lastBuffer != null) {
+					return;
+				}
+				self.lastTime = latest_sample.when;
+
 	    		HistoryPresent = latest_sample.data;
 	    		if (HistoryPresent != null) {
 		    		// draw diagram
@@ -155,8 +178,8 @@ class GraphPixelView extends Ui.Drawable {
 				}
 	    	}
 
-			dc.setPenWidth(2);
-			dc.setColor(primaryColor, Graphics.COLOR_TRANSPARENT);
+			bufferdc.setPenWidth(2);
+			bufferdc.setColor(self.graphColor, Graphics.COLOR_TRANSPARENT);
 
 			//Build and draw Iteration
 			for (var i = 12; i > 0; i--) {
@@ -186,13 +209,13 @@ class GraphPixelView extends Ui.Drawable {
 							// ignore
 						} else {
 							// draw diagram
-							//dc.drawLine(position_x+(xStep-graph_width/2),
+							//bufferdc.drawLine(position_x+(xStep-graph_width/2),
 							//			position_y - (lastyStep-graph_height/2),
 							//			position_x+(xStep-graph_width/2),
 							//			position_y - (yStep-graph_height/2));
-							dc.drawRectangle(
-								10 + position_x+(xStep-graph_width/2),
-								position_y - (yStep-graph_height/2),
+							bufferdc.drawRectangle(
+								10 + self.locX+(xStep-self.width/2),
+								self.locY - (yStep-self.height/2),
 								2, 2
 							);
 						}
@@ -202,30 +225,37 @@ class GraphPixelView extends Ui.Drawable {
 				xStep -= 5;
 			}
 
-			dc.setColor(gmain_color, Graphics.COLOR_TRANSPARENT);
+			bufferdc.setColor(self.fontColor, Graphics.COLOR_TRANSPARENT);
 
 			if (HistoryPresent == null) {
-	        	dc.drawText(position_x,
-						position_y + (position==1?(graph_height/2 + 10):(-graph_height/2-16)),
+	        	bufferdc.drawText(self.locX,
+						self.locY + (position==1?(self.height/2 + 10):(-self.height/2-16)),
 						smallDigitalFont,
 						"--",
 						Graphics.TEXT_JUSTIFY_CENTER|Graphics.TEXT_JUSTIFY_VCENTER);
-	        	return;
+	        	self.setLastBuffer(buffer);
+				return;
 	        }
 	        var value_label = parse_data_value(targetdatatype, HistoryPresent);
 	        var labelll = value_label.format("%d");
-			dc.drawText(position_x,
-						position_y + (position==1?(graph_height/2 + 10):(-graph_height/2-16)),
+			bufferdc.drawText(self.locX,
+						self.locY + (position==1?(self.height/2 + 10):(-self.height/2-16)),
 						smallDigitalFont,
 						labelll,
 						Graphics.TEXT_JUSTIFY_CENTER|Graphics.TEXT_JUSTIFY_VCENTER);
 
 			settings = null;
+			self.setLastBuffer(buffer);
 		} catch(ex) {
 			// currently unkown, weird bug
 			System.println(ex);
-			dc.setColor(gmain_color, Graphics.COLOR_TRANSPARENT);
-        	dc.drawText(position_x, position_y, smallDigitalFont, "--", Graphics.TEXT_JUSTIFY_CENTER|Graphics.TEXT_JUSTIFY_VCENTER);
+			bufferdc.setColor(self.fontColor, Graphics.COLOR_TRANSPARENT);
+        	bufferdc.drawText(self.locX, self.locY, smallDigitalFont, "--", Graphics.TEXT_JUSTIFY_CENTER|Graphics.TEXT_JUSTIFY_VCENTER);
+			self.setLastBuffer(buffer);
+		} finally {
+			buffer = null;
+			bufferdc = null;
+			dc.drawBitmap(0, 0, self.lastBuffer);
 		}
     }
 

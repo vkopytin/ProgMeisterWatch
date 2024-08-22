@@ -8,20 +8,18 @@ import Toybox.Position;
 import Toybox.System;
 
 class SunRiseSunSetView extends WatchUi.Drawable {
-    var x = 0;
-    var y = 0;
     var font = Graphics.FONT_GLANCE;
     var fontSize = Graphics.FONT_TINY;
     var fontColor = Graphics.COLOR_WHITE;
     var location = [0,0];
+    var sunRise = 1.0;
+    var sunSet = 2.0;
 
     var symbols = WatchUi.loadResource(Rez.Fonts.id_symbols);
     var lcdDisplay = WatchUi.loadResource(Rez.Fonts.lcdDisplay9);
 
     function initialize(params) {
         Drawable.initialize(params);
-        self.x = params.get(:locX);
-        self.y = params.get(:locY);
         self.fontSize = params.get(:fontSize);
         self.fontColor = params.get(:fontColor);
 
@@ -52,11 +50,9 @@ class SunRiseSunSetView extends WatchUi.Drawable {
 
         var paddingX = (fieldWidth-50)/2;
         var paddingY = -4;
-        var locX = x;
-        var locY = y;
 
-        var sunRise = self.computeSunrise(true)/1000/60/60;
-        var sunSet = self.computeSunrise(false)/1000/60/60;
+        sunRise = self.computeSunrise(true)/1000/60/60;
+        sunSet = self.computeSunrise(false)/1000/60/60;
 
         var sunRiseStr = Lang.format("$1$:$2$", [Math.floor(sunRise).format("%02.0f"), Math.floor((sunRise-Math.floor(sunRise))*60).format("%02.0f")]);
         var sunSetStr = Lang.format("$1$:$2$", [Math.floor(sunSet).format("%02.0f"), Math.floor((sunSet-Math.floor(sunSet))*60).format("%02.0f")]);

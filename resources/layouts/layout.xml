@@ -1,30 +1,33 @@
 <resources>
     <layout id="WatchFace">
-        <drawable id="Background" class="WatchUi.Bitmap">
-            <param name="locX">0</param>
-            <param name="locY">0</param>
-            <param name="rezId">@Drawables.background</param>
+        <drawable id="Background" />
+        <drawable id="dayNight" class="DayNightView">
+            <param name="locX">80</param>
+            <param name="locY">214</param>
+            <param name="width">100</param>
+            <param name="height">50</param>
         </drawable>
-        <label id="TimeLabel" x="222" y="110" color="#aaeeaa" font="Graphics.FONT_LARGE" justification="Graphics.TEXT_JUSTIFY_CENTER" />
-        <label id="TimeSeparator" x="221" y="110" color="#aaeeaa" font="Graphics.FONT_LARGE" justification="Graphics.TEXT_JUSTIFY_CENTER" />
+
+        <label id="lcdDisplayBig" x="260" y="118" color="0x005500" font="@Fonts.lcdDisplayBig2"
+          text="\u00DB\u00DB\u00DB\u00DB\u00DB" justification="Graphics.TEXT_JUSTIFY_RIGHT" />
+        <label id="TimeLabel" x="258" y="118" color="#aaeeaa" font="@Fonts.lcdDisplayBig2" justification="Graphics.TEXT_JUSTIFY_RIGHT" />
+        <!--label id="TimeSeparator" x="221" y="110" color="#aaeeaa" font="Graphics.FONT_LARGE" justification="Graphics.TEXT_JUSTIFY_CENTER" /-->
         <label id="CurrentDay" x="22" y="119" color="#557755" font="Graphics.FONT_GLANCE" justification="Graphics.TEXT_JUSTIFY_CENTER" />
         <label id="CurrentDayName" x="139" y="119" color="#557755" font="Graphics.FONT_GLANCE" justification="Graphics.TEXT_JUSTIFY_CENTER" />
         <label id="AMPM" x="54" y="118" color="Graphics.COLOR_DK_GRAY" font="Graphics.FONT_GLANCE" justification="Graphics.TEXT_JUSTIFY_CENTER" />
         <label id="HeartRate" x="156" y="167" color="Graphics.COLOR_LT_GRAY" font="Graphics.FONT_GLANCE" justification="Graphics.TEXT_JUSTIFY_LEFT" />
         <label id="HeartIcon" x="146" y="175" color="Graphics.COLOR_LT_GRAY" font="@Fonts.system12" text="\u0039" justification="Graphics.TEXT_JUSTIFY_CENTER" />
-        <label id="lcdDisplayBig" x="226" y="118" color="Graphics.COLOR_DK_GRAY" font="@Fonts.lcdDisplayBig"
-          text="AAAAA" justification="Graphics.TEXT_JUSTIFY_CENTER" />
-        <label id="Steps" x="140" y="190" text="0000" color="Graphics.COLOR_LT_GRAY" font="Graphics.FONT_SYSTEM_XTINY" justification="Graphics.TEXT_JUSTIFY_CENTER" />
+        <label id="Steps" x="130" y="190" text="0000" color="Graphics.COLOR_LT_GRAY" font="Graphics.FONT_SYSTEM_XTINY" justification="Graphics.TEXT_JUSTIFY_CENTER" />
         <drawable id="BatteryLabel" class="BatteryView">
             <param name="locX">65</param>
             <param name="locY">74</param>
             <param name="width">40</param>
             <param name="height">40</param>
             <param name="fontSize">Graphics.FONT_XTINY</param>
-            <param name="fontColor">Graphics.COLOR_LT_GRAY</param>
+            <param name="fontColor">Graphics.COLOR_DK_GRAY</param>
         </drawable>
         <drawable id="SunRiseSunSet" class="SunRiseSunSetView">
-            <param name="locX">110</param>
+            <param name="locX">90</param>
             <param name="locY">0</param>
             <param name="width">30</param>
             <param name="height">50</param>
@@ -32,11 +35,16 @@
             <param name="fontColor">Graphics.COLOR_LT_GRAY</param>
         </drawable>
         <drawable id="bGraphDisplay" class="GraphView">
-            <param name="locX">170</param>
-            <param name="locY">60</param>
+            <param name="locX">132</param>
+            <param name="locY">52</param>
             <param name="dataType">1</param>
             <param name="width">90</param>
-            <param name="height">30</param>
+            <param name="height">40</param>
+        </drawable>
+        <drawable id="greenLCD" class="WatchUi.Bitmap">
+            <param name="locX">161</param>
+            <param name="locY">185</param>
+            <param name="rezId">@Drawables.GreenLCD</param>
         </drawable>
         <drawable id="graphPixelView" class="GraphPixelView">
             <param name="locX">190</param>
@@ -44,6 +52,8 @@
             <param name="dataType">3</param>
             <param name="width">40</param>
             <param name="height">20</param>
+            <param name="graphColor">0x5500AA</param>
+            <param name="fontColor">0xAAFFAA</param>
         </drawable>
     </layout>
 </resources>

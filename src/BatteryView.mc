@@ -4,8 +4,6 @@ import Toybox.Graphics;
 import Toybox.Application.Storage;
 
 class BatteryView extends WatchUi.Drawable {
-    var x = 0;
-    var y = 0;
     var font = Graphics.FONT_GLANCE;
     var symbols = WatchUi.loadResource(Rez.Fonts.id_symbols);
     var statusIcons = WatchUi.loadResource(Rez.Fonts.system12);
@@ -14,8 +12,6 @@ class BatteryView extends WatchUi.Drawable {
 
     function initialize(params) {
         Drawable.initialize(params);
-        self.x = params.get(:locX);
-        self.y = params.get(:locY);
         self.fontSize = params.get(:fontSize);
         self.fontColor = params.get(:fontColor);
     }
@@ -23,8 +19,8 @@ class BatteryView extends WatchUi.Drawable {
     function draw(dc as Dc) {
         Drawable.draw(dc);
 
-        var xBattery = x;
-        var yBattery = y;
+        var xBattery = self.locX;
+        var yBattery = self.locY;
 
         var state = getState();
         var battery = state[:battery][:level];
@@ -45,7 +41,7 @@ class BatteryView extends WatchUi.Drawable {
             dc.setColor(solarColor, Graphics.COLOR_TRANSPARENT);
             dc.drawText(xBattery - 24, yBattery + 5, statusIcons, solarStatusIcon, Graphics.TEXT_JUSTIFY_LEFT);
         } else {
-            dc.setColor(fontColor, Graphics.COLOR_TRANSPARENT);
+            dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
             dc.drawText(xBattery - 24, yBattery + 5, statusIcons, solarStatusIcon, Graphics.TEXT_JUSTIFY_LEFT);
         }
     }

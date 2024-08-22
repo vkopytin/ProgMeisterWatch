@@ -3,7 +3,15 @@
     <bitmap id="SecondHand" filename="secondhand.png"/>
     <bitmap id="HourHand" filename="hourhand.png"/>
     <bitmap id="MinuteHand" filename="minutehand.png"/>
-    <bitmap id="background" filename="background.png"/>
-    <bitmap id="CompassNeedle" filename="compassneedle.png" automaticPalette="false"/>
-    <bitmap id="BarometerScale" filename="barometerscale.png" automaticPalette="false"/>
+    <bitmap id="CompassNeedle" filename="compassneedle.png"/>
+    <bitmap id="BarometerScale" filename="barometerscale.png"/>
+    <bitmap id="GreenLCD" filename="greenlcd.png"/>
+    <bitmap id="lcdBackground" filename="lcd-background.png"/>
+
+    <drawable-list id="Background" background="0x5500aa">
+        <bitmap id="lcdBackground" filename="lcd-background.png"/>
+        <bitmap id="backgroundImage" filename="background.png"/>
+    </drawable-list>
+
+    <bitmap id="DayNightArt" filename="day-night.png" />
 </drawables>

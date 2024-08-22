@@ -56,6 +56,7 @@ const WEATHER_ICON_MAPPER = {
 
 class WatchFaceView extends WatchUi.WatchFace {
     static const timeTemplate = "$1$ $2$";
+    static const timeAltTemplate = "$1$:$2$";
     static const RAD_90_DEG = 1.570796;
 
     private var timer = MainTimer.create(self);
@@ -67,9 +68,12 @@ class WatchFaceView extends WatchUi.WatchFace {
     private var labelAmPm = null as Toybox.WatchUi.Text;
     private var heartRate = null as Toybox.WatchUi.Text;
     private var stepsView = null as Toybox.WatchUi.Text;
+    private var debugLabel = null as Toybox.WatchUi.Text;
 
     private var graphView = null as GraphView;
     private var graphPixelView = null as GraphPixelView;
+    private var dayNightView = null as DayNightView;
+    private var sunRiseSunSet = null as SunRiseSunSetView;
 
     private var secondHand = null as Graphics.BitmapResource;
     private var minuteHand = null as Graphics.BitmapResource;
@@ -109,11 +113,15 @@ class WatchFaceView extends WatchUi.WatchFace {
         stepsView = View.findDrawableById("Steps") as Toybox.WatchUi.Text;
         graphView = View.findDrawableById("bGraphDisplay") as GraphView;
         graphPixelView = View.findDrawableById("graphPixelView") as GraphPixelView;
+        debugLabel = View.findDrawableById("debugLabel") as Toybox.WatchUi.Text;
+        dayNightView = View.findDrawableById("dayNight") as DayNightView;
+        sunRiseSunSet = View.findDrawableById("SunRiseSunSet") as SunRiseSunSetView;
         displayInfo = [
             dc.getWidth(), dc.getHeight(),
             dc.getWidth() / 2, dc.getHeight() / 2
         ];
-        self.timer.nextTick();
+        var clockTime = System.getClockTime();
+        self.updateData(clockTime, 0);
     }
 
     // Called when this View is brought to the foreground. Restore
@@ -135,16 +143,15 @@ class WatchFaceView extends WatchUi.WatchFace {
         dispatchUpdateSteps();
         dispatchUpdateHeading();
 
+        self.dayNightView.setDayNightInfo(
+          self.sunRiseSunSet.sunRise,
+          self.sunRiseSunSet.sunSet
+        );
+
         if (self.sleepMode) {
             self.timer.nextTick();
             var clockTime = System.getClockTime();
             self.updateData(clockTime, 0);
-        }
-
-        if (self.drawDelay < 2.0 && self.buffer != null) {
-          dc.drawBitmap(0, 0, self.buffer);
-          self.onPartialUpdate(dc);
-          return;
         }
 
         self.buffer = Graphics.createBufferedBitmap({
@@ -158,8 +165,8 @@ class WatchFaceView extends WatchUi.WatchFace {
 
         View.onUpdate(bufferdc);
 
-        drawWeatherIcon(bufferdc, 100, 220, 110, Graphics.COLOR_LT_GRAY);
-        drawTemperature(bufferdc, 114, 226, false, Graphics.COLOR_LT_GRAY);
+        drawWeatherIcon(bufferdc, 144, 4, 156, Graphics.COLOR_LT_GRAY);
+        drawTemperature(bufferdc, 162, 14, false, Graphics.COLOR_LT_GRAY);
         drawLocation(bufferdc, 70, 140, 260, 260, Graphics.COLOR_LT_GRAY);
 
         bufferdc.drawBitmap2(55, 35, compassNeedle, {
@@ -182,11 +189,13 @@ class WatchFaceView extends WatchUi.WatchFace {
 
     // Handle the partial update event
     function onPartialUpdate( dc as Dc ) as Void {
+      if (self.sleepMode) {
         timer.nextTick();
-        self.clearSecondsHand(dc, self.buffer);
-        dc.drawBitmap2(displayInfo[2], displayInfo[3], secondHand, {
-            :transform => secondHandTransform
-        });
+      }
+      self.clearSecondsHand(dc, self.buffer);
+      dc.drawBitmap2(displayInfo[2], displayInfo[3], secondHand, {
+          :transform => secondHandTransform
+      });
     }
 
     function clearSecondsHand(dc as Dc, buffer as BufferedBitmap)
@@ -222,7 +231,7 @@ class WatchFaceView extends WatchUi.WatchFace {
         secondHandTransform.translate(-44.0, -0.0);
         secondHandTransform.rotate(secondAngle);
         secondHandTransform.scale(0.6, 0.6);
-        secondHandTransform.translate(-7.5, -100.0);
+        secondHandTransform.translate(-7.5, -108.0);
 
         if (self.sleepMode) {
             return;
@@ -234,16 +243,15 @@ class WatchFaceView extends WatchUi.WatchFace {
     }
 
     function updateData(clockTime, secondAngle) as Void {
+        var timeTemplate = self.timeTemplate;
+        if ((fakeTime * 2.0).toNumber() % 2 == 0) {
+            timeTemplate = self.timeAltTemplate;
+        }
         var timeString = Lang.format(
             timeTemplate,
             [clockTime.hour, clockTime.min.format("%02d"), clockTime.sec.format("%02d")]
         );
         clockView.setText(timeString);
-        if ((fakeTime * 2.0).toNumber() % 2 == 0) {
-            timeSeparator.setText("");
-        } else {
-            timeSeparator.setText(":");
-        }
 
         var minutes = clockTime.min;
         if (minutes % 5 == 0) {
@@ -261,8 +269,8 @@ class WatchFaceView extends WatchUi.WatchFace {
         hourHandTransform = new Graphics.AffineTransform();
         hourHandTransform.translate(-44.0, -0.0);
         hourHandTransform.rotate(hourAngle + minuteAngle / 12.0);
-        hourHandTransform.scale(0.55, 0.55);
-        hourHandTransform.translate(-10.0, -80.0);
+        hourHandTransform.scale(0.7, 0.7);
+        hourHandTransform.translate(-10.0, -58.0);
 
         var state = getState();
         var heartRateValue = state[:heartRate][:heartRate];
@@ -273,7 +281,7 @@ class WatchFaceView extends WatchUi.WatchFace {
         var heading = state[:heading][:heading];
         var transform = new Graphics.AffineTransform();
         transform.scale(0.20, 0.20);
-        transform.rotate(heading);
+        transform.rotate(-heading);
         transform.translate(-15.0, -100.0);
         transform.scale(1.0, 0.5);
         compassAngleTransform = transform;
@@ -293,7 +301,7 @@ class WatchFaceView extends WatchUi.WatchFace {
                 Lang.format("$1$", [DAYS[date.day_of_week]])
             );
             if (date.day_of_week == Date.DAY_SUNDAY) {
-                currentDayName.setColor(Graphics.COLOR_DK_RED);
+                currentDayName.setColor(0xff5555);
             } else {
                 currentDayName.setColor(Graphics.COLOR_DK_GRAY);
             }
