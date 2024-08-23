@@ -27,8 +27,8 @@ class GraphView extends Ui.Drawable {
 
     var smallDigitalFont = WatchUi.loadResource(Rez.Fonts.lcdDisplay);
     var dataType = 1;
-	private var lastBuffer = null as Graphics.BufferedBitmap;
-	private var lastTime = null as Toybox.Time.Moment;
+	private var lastBuffer = null as Graphics.BufferedBitmap?;
+	private var lastTime = null as Toybox.Time.Moment?;
 
 	function setLastBuffer(buffer as Graphics.BufferedBitmap) {
 		if (self.lastBuffer != null) {
@@ -96,8 +96,8 @@ class GraphView extends Ui.Drawable {
     }
 
     function draw(dc) {
-		var buffer = null as Graphics.BufferedBitmap;
-		var bufferdc = null as Graphics.Dc;
+		var buffer = null as Graphics.BufferedBitmap?;
+		var bufferdc = null as Graphics.Dc?;
     	if (!need_draw()) {
     		return;
     	}

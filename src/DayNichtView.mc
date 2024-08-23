@@ -15,11 +15,11 @@ class DayNightView extends Ui.Drawable {
     private var sunRiseHour = 1.0;
     private var sunSetHour = 2.0;
 
-    private var background = null as Graphics.BitmapResource;
-    private var dayNightImage = null as Graphics.Bitmap;
+    private var background = null as Graphics.BitmapResource?;
+    private var dayNightImage = null as Graphics.Bitmap?;
     private var lastBuffer = null as Graphics.BufferedBitmap;
-    private var dayNightInfo = null as SunRiseSunSetView;
-    private var fillBackground = null as Graphics.BitmapTexture;
+    private var dayNightInfo = null as SunRiseSunSetView?;
+    private var fillBackground = null as Graphics.BitmapTexture?;
     private var lastDrawTime = 0;
 
     function setLastBuffer(buffer as Graphics.BufferedBitmap) {
@@ -47,10 +47,10 @@ class DayNightView extends Ui.Drawable {
     }
 
     function draw(dc as Graphics.Dc) {
-        var buffer = null as Graphics.BufferedBitmap;
-        var bufferdc = null as Graphics.Dc;
-        var buffer2 = null as Graphics.BufferedBitmap;
-        var bufferdc2 = null as Graphics.Dc;
+        var buffer = null as Graphics.BufferedBitmap?;
+        var bufferdc = null as Graphics.Dc?;
+        var buffer2 = null as Graphics.BufferedBitmap?;
+        var bufferdc2 = null as Graphics.Dc?;
 
         Drawable.draw(dc);
 

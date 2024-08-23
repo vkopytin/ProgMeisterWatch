@@ -61,24 +61,24 @@ class WatchFaceView extends WatchUi.WatchFace {
 
     private var timer = MainTimer.create(self);
     private var sleepMode = false;
-    private var clockView = null as Toybox.WatchUi.Text;
-    private var timeSeparator = null as Toybox.WatchUi.Text;
-    private var currentDay = null as Toybox.WatchUi.Text;
-    private var currentDayName = null as Toybox.WatchUi.Text;
-    private var labelAmPm = null as Toybox.WatchUi.Text;
-    private var heartRate = null as Toybox.WatchUi.Text;
-    private var stepsView = null as Toybox.WatchUi.Text;
-    private var debugLabel = null as Toybox.WatchUi.Text;
+    private var clockView = null as Toybox.WatchUi.Text?;
+    private var timeSeparator = null as Toybox.WatchUi.Text?;
+    private var currentDay = null as Toybox.WatchUi.Text?;
+    private var currentDayName = null as Toybox.WatchUi.Text?;
+    private var labelAmPm = null as Toybox.WatchUi.Text?;
+    private var heartRate = null as Toybox.WatchUi.Text?;
+    private var stepsView = null as Toybox.WatchUi.Text?;
+    private var debugLabel = null as Toybox.WatchUi.Text?;
 
-    private var graphView = null as GraphView;
-    private var graphPixelView = null as GraphPixelView;
-    private var dayNightView = null as DayNightView;
-    private var sunRiseSunSet = null as SunRiseSunSetView;
+    private var graphView = null as GraphView?;
+    private var graphPixelView = null as GraphPixelView?;
+    private var dayNightView = null as DayNightView?;
+    private var sunRiseSunSet = null as SunRiseSunSetView?;
 
-    private var secondHand = null as Graphics.BitmapResource;
-    private var minuteHand = null as Graphics.BitmapResource;
-    private var hourHand = null as Graphics.BitmapResource;
-    private var compassNeedle = null as Graphics.BitmapResource;
+    private var secondHand = null as Graphics.BitmapResource?;
+    private var minuteHand = null as Graphics.BitmapResource?;
+    private var hourHand = null as Graphics.BitmapResource?;
+    private var compassNeedle = null as Graphics.BitmapResource?;
 
     private var secondHandTransform = new Graphics.AffineTransform();
     private var minuteHandTransform = new Graphics.AffineTransform();
@@ -87,7 +87,7 @@ class WatchFaceView extends WatchUi.WatchFace {
 
     private var displayInfo = [130, 130, 260, 260] as Array<Number>;
 
-    private var buffer = null as Graphics.BufferedBitmap;
+    private var buffer = null as Graphics.BufferedBitmap?;
     private var lastHour = -1;
     private var drawDelay = 1000;
 
@@ -136,54 +136,60 @@ class WatchFaceView extends WatchUi.WatchFace {
 
     // Update the view
     function onUpdate(dc as Dc) as Void {
-        var bufferdc = null;
+        var bufferdc = null as Graphics.Dc?;
 
-        dispatchUpdateButtery();
-        dispatchUpdateHeartRate();
-        dispatchUpdateSteps();
-        dispatchUpdateHeading();
+        try {
+          dispatchUpdateButtery();
+          dispatchUpdateHeartRate();
+          dispatchUpdateSteps();
+          dispatchUpdateHeading();
 
-        self.dayNightView.setDayNightInfo(
-          self.sunRiseSunSet.sunRise,
-          self.sunRiseSunSet.sunSet
-        );
+          self.dayNightView.setDayNightInfo(
+            self.sunRiseSunSet.sunRise,
+            self.sunRiseSunSet.sunSet
+          );
 
-        if (self.sleepMode) {
-            self.timer.nextTick();
-            var clockTime = System.getClockTime();
-            self.updateData(clockTime, 0);
-        }
+          if (self.sleepMode) {
+              self.timer.nextTick();
+              var clockTime = System.getClockTime();
+              self.updateData(clockTime, 0);
+          }
 
-        self.buffer = Graphics.createBufferedBitmap({
-            :width=>dc.getWidth(),
-            :height=>dc.getHeight()
-        }).get();
+          self.buffer = Graphics.createBufferedBitmap({
+              :width=>dc.getWidth(),
+              :height=>dc.getHeight()
+          }).get();
 
-        bufferdc = self.buffer.getDc();
+          bufferdc = self.buffer.getDc();
 
-        bufferdc.setAntiAlias(true);
+          bufferdc.setAntiAlias(true);
 
-        View.onUpdate(bufferdc);
+          View.onUpdate(bufferdc);
 
-        drawWeatherIcon(bufferdc, 144, 4, 156, Graphics.COLOR_LT_GRAY);
-        drawTemperature(bufferdc, 162, 14, false, Graphics.COLOR_LT_GRAY);
-        drawLocation(bufferdc, 70, 140, 260, 260, Graphics.COLOR_LT_GRAY);
+          drawWeatherIcon(bufferdc, 144, 4, 156, Graphics.COLOR_LT_GRAY);
+          drawTemperature(bufferdc, 162, 14, false, Graphics.COLOR_LT_GRAY);
+          drawLocation(bufferdc, 70, 140, 260, 260, Graphics.COLOR_LT_GRAY);
 
-        bufferdc.drawBitmap2(55, 35, compassNeedle, {
-            :transform => compassAngleTransform
-        });
-        bufferdc.drawBitmap2(displayInfo[2], displayInfo[3], minuteHand, {
-            :transform => minuteHandTransform
-        });
-        bufferdc.drawBitmap2(displayInfo[2], displayInfo[3], hourHand, {
-            :transform => hourHandTransform
-        });
+          bufferdc.drawBitmap2(55, 35, compassNeedle, {
+              :transform => compassAngleTransform
+          });
+          bufferdc.drawBitmap2(displayInfo[2], displayInfo[3], minuteHand, {
+              :transform => minuteHandTransform
+          });
+          bufferdc.drawBitmap2(displayInfo[2], displayInfo[3], hourHand, {
+              :transform => hourHandTransform
+          });
 
-        //if (self.sleepMode)
-        {
-            dc.clearClip();
-            dc.drawBitmap(0, 0, self.buffer);
-            self.onPartialUpdate(dc);
+          //if (self.sleepMode)
+          {
+              dc.clearClip();
+              dc.drawBitmap(0, 0, self.buffer);
+              self.onPartialUpdate(dc);
+          }
+        } catch(ex) {
+			    System.println(ex);
+			    bufferdc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
+        	bufferdc.drawText(10, 120, Graphics.FONT_TINY, ex, Graphics.TEXT_JUSTIFY_CENTER|Graphics.TEXT_JUSTIFY_VCENTER);
         }
     }
 
@@ -208,6 +214,39 @@ class WatchFaceView extends WatchUi.WatchFace {
         //dc.drawRectangle(dcCurClip[0], dcCurClip[1], dcCurClip[2], dcCurClip[3]);
 
         dc.drawBitmap(0,0,buffer);
+    }
+
+    function calculateSecondHandClip(seconds, middleX, middleY, handLength) {
+        var angle = (seconds / 60.0) * Math.PI * 2 - RAD_90_DEG;
+        var points = [
+            middleX+(Math.cos(angle) * handLength),
+            middleY+(Math.sin(angle) * handLength),
+            middleX+(Math.cos(angle+Math.PI) * handLength * 0.25),   // add PI to get 180 deg (opposite dir)
+            middleY+(Math.sin(angle+Math.PI) * handLength * 0.25)    // add PI to get 180 deg
+        ];
+        var bbox = [
+            (points[0] < points[2] ? points[0] : points[2])-2,
+            (points[1] < points[3] ? points[1] : points[3])-2,
+            (points[0]-points[2]).abs()+4,
+            (points[1]-points[3]).abs()+4
+        ];
+        points = null;
+        // need to adjust the bounding box to handle the tail and the hand centers
+        if (bbox[0] > middleX-13) {
+            bbox[0] = middleX-13;
+            bbox[2] += 13;
+        }
+        if (bbox[1] > middleY-13) {
+            bbox[1] = middleY-13;
+            bbox[3] += 13;
+        }
+        if (bbox[0]+bbox[2] < middleX+13) {
+            bbox[2] = middleX+13-bbox[0];
+        }
+        if (bbox[1]+bbox[3] < middleY+13) {
+            bbox[3] = middleY+13-bbox[1];
+        }
+        return (bbox);
     }
 
     function every5Minutes() as Void {
@@ -306,39 +345,6 @@ class WatchFaceView extends WatchUi.WatchFace {
                 currentDayName.setColor(Graphics.COLOR_DK_GRAY);
             }
         }
-    }
-
-    function calculateSecondHandClip(seconds, middleX, middleY, handLength) {
-        var angle = (seconds / 60.0) * Math.PI * 2 - RAD_90_DEG;
-        var points = [
-            middleX+(Math.cos(angle) * handLength),
-            middleY+(Math.sin(angle) * handLength),
-            middleX+(Math.cos(angle+Math.PI) * handLength * 0.25),   // add PI to get 180 deg (opposite dir)
-            middleY+(Math.sin(angle+Math.PI) * handLength * 0.25)    // add PI to get 180 deg
-        ];
-        var bbox = [
-            (points[0] < points[2] ? points[0] : points[2])-2,
-            (points[1] < points[3] ? points[1] : points[3])-2,
-            (points[0]-points[2]).abs()+4,
-            (points[1]-points[3]).abs()+4
-        ];
-        points = null;
-        // need to adjust the bounding box to handle the tail and the hand centers
-        if (bbox[0] > middleX-13) {
-            bbox[0] = middleX-13;
-            bbox[2] += 13;
-        }
-        if (bbox[1] > middleY-13) {
-            bbox[1] = middleY-13;
-            bbox[3] += 13;
-        }
-        if (bbox[0]+bbox[2] < middleX+13) {
-            bbox[2] = middleX+13-bbox[0];
-        }
-        if (bbox[1]+bbox[3] < middleY+13) {
-            bbox[3] = middleY+13-bbox[1];
-        }
-        return (bbox);
     }
 
     // Called when this View is removed from the screen. Save the
@@ -518,7 +524,7 @@ function drawWeatherIcon(dc, x, y, x2, fontColor) {
 
     var offset = 0;
 
-    if (showBoolean == false and weather != null and
+    if (showBoolean == false and
         (weather.feelsLikeTemperature !=
          null)) {  // feels like ;  and weather.feelsLikeTemperature instanceof
                    // Number
@@ -535,10 +541,9 @@ function drawWeatherIcon(dc, x, y, x2, fontColor) {
         // temp = Lang.format("$1$", [temp.format("%d")] );
         units = "°F";
       }
-    } else if (weather != null and
-               (weather.temperature !=
-                null)) {  // real temperature ;  and weather.temperature
-                          // instanceof Number
+    } else if ((weather.temperature != null)) {
+      // real temperature ;  and weather.temperature
+      // instanceof Number
       if (TempMetric == System.UNIT_METRIC or
           Storage.getValue(16) == true) {  // Celsius
         units = "°C";
