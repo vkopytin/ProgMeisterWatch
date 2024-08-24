@@ -72,6 +72,7 @@ class WatchFaceView extends WatchUi.WatchFace {
     private var debugLabel = null as Toybox.WatchUi.Text?;
     private var energyLabel = null as Toybox.WatchUi.Text?;
     private var stressLabel = null as Toybox.WatchUi.Text?;
+    private var pieChart = null as Toybox.WatchUi.Text?;
 
     private var graphView = null as GraphView?;
     private var graphPixelView = null as GraphPixelView?;
@@ -93,6 +94,7 @@ class WatchFaceView extends WatchUi.WatchFace {
     private var buffer = null as Graphics.BufferedBitmap?;
     private var lastHour = -1;
     private var drawDelay = 1000;
+    private var fakePieChartValue = 0;
 
     function initialize() {
         WatchFace.initialize();
@@ -121,6 +123,7 @@ class WatchFaceView extends WatchUi.WatchFace {
         sunRiseSunSet = View.findDrawableById("SunRiseSunSet") as SunRiseSunSetView;
         energyLabel = View.findDrawableById("Energy") as Toybox.WatchUi.Text;
         stressLabel = View.findDrawableById("Stress") as Toybox.WatchUi.Text;
+        pieChart = View.findDrawableById("pieChart") as Toybox.WatchUi.Text;
         displayInfo = [
             dc.getWidth(), dc.getHeight(),
             dc.getWidth() / 2, dc.getHeight() / 2
@@ -327,6 +330,11 @@ class WatchFaceView extends WatchUi.WatchFace {
         energyLabel.setText(bodyBattery);
         var stress = state[:stress][:stress];
         stressLabel.setText(stress);
+
+        if ((fakeTime * 10.0).toNumber() % 5 == 0) {
+          fakePieChartValue = fakePieChartValue < 6 ? fakePieChartValue + 1 : 0;
+          self.pieChart.setText(fakePieChartValue.toString());
+        }
 
         var heading = state[:heading][:heading];
         var transform = new Graphics.AffineTransform();

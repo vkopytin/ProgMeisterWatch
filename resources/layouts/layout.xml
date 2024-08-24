@@ -14,8 +14,8 @@
         <!--label id="TimeSeparator" x="221" y="110" color="#aaeeaa" font="Graphics.FONT_LARGE" justification="Graphics.TEXT_JUSTIFY_CENTER" /-->
         <label id="EnergySign" x="234" y="96" color="#aaeeaa" text="\u0045" font="@Fonts.id_symbols" justification="Graphics.TEXT_JUSTIFY_RIGHT" />
         <label id="Energy" x="236" y="100" color="#aaeeaa" text="100" font="@Fonts.lcdDisplay9" justification="Graphics.TEXT_JUSTIFY_LEFT" />
-        <label id="StressSign" x="234" y="146" color="#aaeeaa" text="\u0043" font="@Fonts.id_symbols" justification="Graphics.TEXT_JUSTIFY_RIGHT" />
-        <label id="Stress" x="234" y="152" color="#aaeeaa" text="100" font="@Fonts.lcdDisplay9" justification="Graphics.TEXT_JUSTIFY_LEFT" />
+        <label id="StressSign" x="232" y="144" color="#aaeeaa" text="\u0043" font="@Fonts.id_symbols" justification="Graphics.TEXT_JUSTIFY_RIGHT" />
+        <label id="Stress" x="234" y="150" color="#aaeeaa" text="100" font="@Fonts.lcdDisplay9" justification="Graphics.TEXT_JUSTIFY_LEFT" />
         <label id="CurrentDay" x="22" y="119" color="#557755" font="Graphics.FONT_GLANCE" justification="Graphics.TEXT_JUSTIFY_CENTER" />
         <label id="CurrentDayName" x="139" y="119" color="#557755" font="Graphics.FONT_GLANCE" justification="Graphics.TEXT_JUSTIFY_CENTER" />
         <label id="AMPM" x="54" y="118" color="Graphics.COLOR_DK_GRAY" font="Graphics.FONT_GLANCE" justification="Graphics.TEXT_JUSTIFY_CENTER" />
@@ -23,6 +23,7 @@
         <label id="HeartIcon" x="146" y="175" color="Graphics.COLOR_LT_GRAY" font="@Fonts.system12" text="\u0039" justification="Graphics.TEXT_JUSTIFY_CENTER" />
         <label id="StepsSign" x="118" y="190" color="Graphics.COLOR_LT_GRAY" text="\u0042" font="@Fonts.id_symbols" justification="Graphics.TEXT_JUSTIFY_RIGHT" />
         <label id="Steps" x="120" y="190" text="0000" color="Graphics.COLOR_LT_GRAY" font="Graphics.FONT_SYSTEM_XTINY" justification="Graphics.TEXT_JUSTIFY_LEFT" />
+        <label id="pieChart" x="69" y="209" text="1" color="#555555" font="@Fonts.pieChart" justification="Graphics.TEXT_JUSTIFY_RIGHT" />
         <drawable id="BatteryLabel" class="BatteryView">
             <param name="locX">65</param>
             <param name="locY">74</param>
