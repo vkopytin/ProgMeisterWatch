@@ -105,7 +105,7 @@ class GraphView extends Ui.Drawable {
 		var textPosX = self.width / 2 - 6;
 		var textPosY = self.height - 8;
 		var graphPosX = self.width / 2;
-		var graphPosY = 0;
+		var graphPosY = self.height / 2 - 10;
 
     	try {
 			buffer = Graphics.createBufferedBitmap({
@@ -147,7 +147,7 @@ class GraphView extends Ui.Drawable {
 	        var minMaxDiff = (HistoryMax - HistoryMin).toFloat();
 
 	        var xStep = self.width;
-	        var height = self.height;
+	        var height = self.height - 10;
 	        var HistoryPresent = 0;
 
 			var HistoryNew = 0;
@@ -169,10 +169,10 @@ class GraphView extends Ui.Drawable {
 	    		HistoryPresent = latest_sample.data;
 	    		if (HistoryPresent != null) {
 		    		// draw diagram
-					var historyDifPers = (HistoryPresent - HistoryMin)/minMaxDiff;
+					var historyDifPers = (HistoryPresent - HistoryMin) / minMaxDiff;
 					var yStep = historyDifPers * height;
-					yStep = yStep>height?height:yStep;
-					yStep = yStep<0?0:yStep;
+					yStep = yStep > height ? height : yStep;
+					yStep = yStep < 0 ? 0 : yStep;
 					lastyStep = yStep;
 				} else {
 					lastyStep = null;
@@ -197,19 +197,19 @@ class GraphView extends Ui.Drawable {
 						// ignore
 					} else {
 						// draw diagram
-						var historyDifPers = ((HistoryNew - HistoryMin))/minMaxDiff;
+						var historyDifPers = (HistoryNew - HistoryMin) / minMaxDiff;
 						var yStep = historyDifPers * height;
-						yStep = yStep>height?height:yStep;
-						yStep = yStep<0?0:yStep;
+						yStep = yStep > height ? height : yStep;
+						yStep = yStep < 0 ? 0 : yStep;
 
 						if (lastyStep == null) {
 							// ignore
 						} else {
 							// draw diagram
-							bufferdc.drawLine(graphPosX+(xStep-self.width/2),
-										graphPosY - (lastyStep-self.height/2),
-										graphPosX+(xStep-self.width/2),
-										graphPosY - (yStep-self.height/2));
+							bufferdc.drawLine(graphPosX + (xStep - self.width / 2),
+										graphPosY - (lastyStep - height / 2),
+										graphPosX + (xStep - self.width / 2),
+										graphPosY - (yStep - height / 2));
 						}
 						lastyStep = yStep;
 					}
@@ -248,6 +248,7 @@ class GraphView extends Ui.Drawable {
 			buffer = null;
 			bufferdc = null;
 			dc.drawBitmap(self.locX, self.locY, self.lastBuffer);
+			dc.drawLine(self.locX + self.width * 0.2, self.locY, self.locX + self.width * 0.6, self.locY);
 		}
     }
 }

@@ -5,6 +5,7 @@ import Toybox.WatchUi;
 import Toybox.Weather;
 import Toybox.Time;
 import Toybox.Application;
+import Toybox.Graphics;
 using Toybox.Time.Gregorian as Date;
 
 const DAYS = {
@@ -69,16 +70,18 @@ class WatchFaceView extends WatchUi.WatchFace {
     private var heartRate = null as Toybox.WatchUi.Text?;
     private var stepsView = null as Toybox.WatchUi.Text?;
     private var debugLabel = null as Toybox.WatchUi.Text?;
+    private var energyLabel = null as Toybox.WatchUi.Text?;
+    private var stressLabel = null as Toybox.WatchUi.Text?;
 
     private var graphView = null as GraphView?;
     private var graphPixelView = null as GraphPixelView?;
     private var dayNightView = null as DayNightView?;
     private var sunRiseSunSet = null as SunRiseSunSetView?;
 
-    private var secondHand = null as Graphics.BitmapResource?;
-    private var minuteHand = null as Graphics.BitmapResource?;
-    private var hourHand = null as Graphics.BitmapResource?;
-    private var compassNeedle = null as Graphics.BitmapResource?;
+    private var secondHand = null as WatchUi.BitmapResource?;
+    private var minuteHand = null as WatchUi.BitmapResource?;
+    private var hourHand = null as WatchUi.BitmapResource?;
+    private var compassNeedle = null as WatchUi.BitmapResource?;
 
     private var secondHandTransform = new Graphics.AffineTransform();
     private var minuteHandTransform = new Graphics.AffineTransform();
@@ -116,6 +119,8 @@ class WatchFaceView extends WatchUi.WatchFace {
         debugLabel = View.findDrawableById("debugLabel") as Toybox.WatchUi.Text;
         dayNightView = View.findDrawableById("dayNight") as DayNightView;
         sunRiseSunSet = View.findDrawableById("SunRiseSunSet") as SunRiseSunSetView;
+        energyLabel = View.findDrawableById("Energy") as Toybox.WatchUi.Text;
+        stressLabel = View.findDrawableById("Stress") as Toybox.WatchUi.Text;
         displayInfo = [
             dc.getWidth(), dc.getHeight(),
             dc.getWidth() / 2, dc.getHeight() / 2
@@ -143,6 +148,8 @@ class WatchFaceView extends WatchUi.WatchFace {
           dispatchUpdateHeartRate();
           dispatchUpdateSteps();
           dispatchUpdateHeading();
+          dispatchUpdateBodyBattery();
+          dispatchUpdateStress();
 
           self.dayNightView.setDayNightInfo(
             self.sunRiseSunSet.sunRise,
@@ -316,6 +323,10 @@ class WatchFaceView extends WatchUi.WatchFace {
         heartRate.setText(heartRateValue);
         var steps = state[:steps][:steps];
         stepsView.setText(steps);
+        var bodyBattery = state[:bodyBattery][:bodyBattery];
+        energyLabel.setText(bodyBattery);
+        var stress = state[:stress][:stress];
+        stressLabel.setText(stress);
 
         var heading = state[:heading][:heading];
         var transform = new Graphics.AffineTransform();
