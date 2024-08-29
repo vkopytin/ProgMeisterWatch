@@ -2,6 +2,7 @@
 /internal-mir/
 /mir/
 /dist/
+/export/
 
 *.prg
 *.debug.xml
