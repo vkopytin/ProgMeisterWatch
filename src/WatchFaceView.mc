@@ -209,54 +209,27 @@ class WatchFaceView extends WatchUi.WatchFace {
         timer.nextTick();
       }
       self.clearSecondsHand(dc, self.buffer);
-      dc.drawBitmap2(displayInfo[2], displayInfo[3], secondHand, {
+      dc.drawBitmap2(0, 0, secondHand, {
           :transform => secondHandTransform
       });
     }
 
+    private var initClip = [[-5.0, 126.0],[-5.0, -1.0],[22.0, -1.0],[22.0, 126.0]];
     function clearSecondsHand(dc as Dc, buffer as BufferedBitmap)
     {
-        var x = 86;
-        var y = 130;
-
-        var dcCurClip = calculateSecondHandClip(previousSeconds, x, y, 70.0);
-        dc.setClip(dcCurClip[0], dcCurClip[1], dcCurClip[2], dcCurClip[3]);
-        //dc.drawRectangle(dcCurClip[0], dcCurClip[1], dcCurClip[2], dcCurClip[3]);
-
-        dc.drawBitmap(0,0,buffer);
-    }
-
-    function calculateSecondHandClip(seconds, middleX, middleY, handLength) {
-        var angle = (seconds / 60.0) * Math.PI * 2 - RAD_90_DEG;
-        var points = [
-            middleX+(Math.cos(angle) * handLength),
-            middleY+(Math.sin(angle) * handLength),
-            middleX+(Math.cos(angle+Math.PI) * handLength * 0.25),   // add PI to get 180 deg (opposite dir)
-            middleY+(Math.sin(angle+Math.PI) * handLength * 0.25)    // add PI to get 180 deg
-        ];
-        var bbox = [
-            (points[0] < points[2] ? points[0] : points[2])-2,
-            (points[1] < points[3] ? points[1] : points[3])-2,
-            (points[0]-points[2]).abs()+4,
-            (points[1]-points[3]).abs()+4
-        ];
-        points = null;
-        // need to adjust the bounding box to handle the tail and the hand centers
-        if (bbox[0] > middleX-13) {
-            bbox[0] = middleX-13;
-            bbox[2] += 13;
-        }
-        if (bbox[1] > middleY-13) {
-            bbox[1] = middleY-13;
-            bbox[3] += 13;
-        }
-        if (bbox[0]+bbox[2] < middleX+13) {
-            bbox[2] = middleX+13-bbox[0];
-        }
-        if (bbox[1]+bbox[3] < middleY+13) {
-            bbox[3] = middleY+13-bbox[1];
-        }
-        return (bbox);
+      var clip = secondHandTransform.transformPoints(self.initClip);
+      //dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+      //dc.fillPolygon(clip);
+      if (self.previousSeconds < 16.0) {
+        dc.setClip(clip[0][0], clip[1][1], clip[2][0] - clip[0][0], clip[3][1] - clip[1][1]);
+      } else if (self.previousSeconds < 31.0) {
+        dc.setClip(clip[3][0], clip[0][1], clip[1][0] - clip[3][0], clip[2][1] - clip[0][1]);
+      } else if (self.previousSeconds < 46.0) {
+        dc.setClip(clip[2][0], clip[3][1], clip[0][0] - clip[2][0], clip[1][1] - clip[3][1]);
+      } else {
+        dc.setClip(clip[1][0], clip[2][1], clip[3][0] - clip[1][0], clip[0][1] - clip[2][1]);
+      }
+      dc.drawBitmap(0, 0, self.buffer);
     }
 
     function every5Minutes() as Void {
@@ -277,7 +250,7 @@ class WatchFaceView extends WatchUi.WatchFace {
         self.previousSeconds = seconds;
         var secondAngle = (lastStep/ 60.0) * 2.0 * Math.PI;
         secondHandTransform = new Graphics.AffineTransform();
-        secondHandTransform.translate(-44.0, -0.0);
+        secondHandTransform.translate(86.0, 130.0);
         secondHandTransform.rotate(secondAngle);
         secondHandTransform.scale(0.6, 0.6);
         secondHandTransform.translate(-7.5, -108.0);
