@@ -29,7 +29,6 @@ class DayNightView extends Ui.Drawable {
 		self.lastBuffer = buffer;
 	}
 
-
     function initialize(params) {
     	Drawable.initialize(params);
 

@@ -146,61 +146,52 @@ class WatchFaceView extends WatchUi.WatchFace {
     function onUpdate(dc as Dc) as Void {
         var bufferdc = null as Graphics.Dc?;
 
-        try {
-          dispatchUpdateButtery();
-          dispatchUpdateHeartRate();
-          dispatchUpdateSteps();
-          dispatchUpdateHeading();
-          dispatchUpdateBodyBattery();
-          dispatchUpdateStress();
+        dispatchUpdateButtery();
+        dispatchUpdateHeartRate();
+        dispatchUpdateSteps();
+        dispatchUpdateHeading();
+        dispatchUpdateBodyBattery();
+        dispatchUpdateStress();
 
-          self.dayNightView.setDayNightInfo(
-            self.sunRiseSunSet.sunRise,
-            self.sunRiseSunSet.sunSet
-          );
+        self.dayNightView.setDayNightInfo(
+          self.sunRiseSunSet.sunRise,
+          self.sunRiseSunSet.sunSet
+        );
 
-          if (self.sleepMode) {
-              self.timer.nextTick();
-              var clockTime = System.getClockTime();
-              self.updateData(clockTime, 0);
-          }
-
-          self.buffer = Graphics.createBufferedBitmap({
-              :width=>dc.getWidth(),
-              :height=>dc.getHeight()
-          }).get();
-
-          bufferdc = self.buffer.getDc();
-
-          bufferdc.setAntiAlias(true);
-
-          View.onUpdate(bufferdc);
-
-          drawWeatherIcon(bufferdc, 144, 4, 156, Graphics.COLOR_LT_GRAY);
-          drawTemperature(bufferdc, 162, 14, false, Graphics.COLOR_LT_GRAY);
-          drawLocation(bufferdc, 70, 140, 260, 260, Graphics.COLOR_LT_GRAY);
-
-          bufferdc.drawBitmap2(55, 35, compassNeedle, {
-              :transform => compassAngleTransform
-          });
-          bufferdc.drawBitmap2(displayInfo[2], displayInfo[3], minuteHand, {
-              :transform => minuteHandTransform
-          });
-          bufferdc.drawBitmap2(displayInfo[2], displayInfo[3], hourHand, {
-              :transform => hourHandTransform
-          });
-
-          //if (self.sleepMode)
-          {
-              dc.clearClip();
-              dc.drawBitmap(0, 0, self.buffer);
-              self.onPartialUpdate(dc);
-          }
-        } catch(ex) {
-			    System.println(ex);
-			    bufferdc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
-        	bufferdc.drawText(10, 120, Graphics.FONT_TINY, ex, Graphics.TEXT_JUSTIFY_CENTER|Graphics.TEXT_JUSTIFY_VCENTER);
+        if (self.sleepMode) {
+            self.timer.nextTick();
+            var clockTime = System.getClockTime();
+            self.updateData(clockTime, 0);
         }
+
+        self.buffer = Graphics.createBufferedBitmap({
+            :width=>dc.getWidth(),
+            :height=>dc.getHeight()
+        }).get();
+
+        bufferdc = self.buffer.getDc();
+
+        bufferdc.setAntiAlias(true);
+
+        View.onUpdate(bufferdc);
+
+        drawWeatherIcon(bufferdc, 144, 4, 156, Graphics.COLOR_LT_GRAY);
+        drawTemperature(bufferdc, 162, 14, false, Graphics.COLOR_LT_GRAY);
+        drawLocation(bufferdc, 70, 140, 260, 260, Graphics.COLOR_LT_GRAY);
+
+        bufferdc.drawBitmap2(55, 35, compassNeedle, {
+            :transform => compassAngleTransform
+        });
+        bufferdc.drawBitmap2(displayInfo[2], displayInfo[3], minuteHand, {
+            :transform => minuteHandTransform
+        });
+        bufferdc.drawBitmap2(displayInfo[2], displayInfo[3], hourHand, {
+            :transform => hourHandTransform
+        });
+
+        dc.clearClip();
+        dc.drawBitmap(0, 0, self.buffer);
+        self.onPartialUpdate(dc);
     }
 
     // Handle the partial update event

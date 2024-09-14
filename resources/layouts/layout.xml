@@ -53,11 +53,11 @@
             <param name="rezId">@Drawables.GreenLCD</param>
         </drawable>
         <drawable id="graphPixelView" class="GraphPixelView">
-            <param name="locX">190</param>
-            <param name="locY">200</param>
+            <param name="locX">163</param>
+            <param name="locY">188</param>
             <param name="dataType">3</param>
-            <param name="width">40</param>
-            <param name="height">20</param>
+            <param name="width">70</param>
+            <param name="height">40</param>
             <param name="graphColor">0x5500AA</param>
             <param name="fontColor">0xAAFFAA</param>
         </drawable>

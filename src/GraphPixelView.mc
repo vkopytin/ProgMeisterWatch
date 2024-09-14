@@ -109,8 +109,8 @@ class GraphPixelView extends Ui.Drawable {
 
     	try {
 			buffer = Graphics.createBufferedBitmap({
-				:width=>dc.getWidth(),
-				:height=>dc.getHeight(),
+				:width=>self.width,
+				:height=>self.height,
 			}).get();
 			bufferdc = buffer.getDc();
 	    	settings = System.getDeviceSettings();
@@ -123,7 +123,7 @@ class GraphPixelView extends Ui.Drawable {
 
 	        if (HistoryIter == null) {
 	        	bufferdc.setColor(self.fontColor, Graphics.COLOR_TRANSPARENT);
-	        	bufferdc.drawText(self.locX, self.locY, smallDigitalFont, "--", Graphics.TEXT_JUSTIFY_CENTER|Graphics.TEXT_JUSTIFY_VCENTER);
+	        	bufferdc.drawText(self.width / 2, self.height - 10, smallDigitalFont, "--", Graphics.TEXT_JUSTIFY_CENTER|Graphics.TEXT_JUSTIFY_VCENTER);
                 self.setLastBuffer(buffer);
 				return;
 	        }
@@ -133,7 +133,7 @@ class GraphPixelView extends Ui.Drawable {
 
 	        if (HistoryMin == null || HistoryMax == null) {
 	        	bufferdc.setColor(self.fontColor, Graphics.COLOR_TRANSPARENT);
-	        	bufferdc.drawText(self.locX, self.locY, smallDigitalFont, "--", Graphics.TEXT_JUSTIFY_CENTER|Graphics.TEXT_JUSTIFY_VCENTER);
+	        	bufferdc.drawText(self.width / 2, self.height - 10, smallDigitalFont, "--", Graphics.TEXT_JUSTIFY_CENTER|Graphics.TEXT_JUSTIFY_VCENTER);
                 self.setLastBuffer(buffer);
 				return;
 	        }
@@ -146,7 +146,7 @@ class GraphPixelView extends Ui.Drawable {
 	        var minMaxDiff = (HistoryMax - HistoryMin).toFloat();
 
 	        var xStep = self.width;
-	        var height = self.height;
+	        var height = self.height - 18;
 	        var HistoryPresent = 0;
 
 			var HistoryNew = 0;
@@ -182,7 +182,7 @@ class GraphPixelView extends Ui.Drawable {
 			bufferdc.setColor(self.graphColor, Graphics.COLOR_TRANSPARENT);
 
 			//Build and draw Iteration
-			for (var i = 12; i > 0; i--) {
+			for (var i = 14; i > 0; i--) {
 				var sample = arraySumm([
 					HistoryIter.next(), HistoryIter.next(), HistoryIter.next(), HistoryIter.next(),
 					HistoryIter.next(), HistoryIter.next(), HistoryIter.next(), HistoryIter.next(),
@@ -214,8 +214,8 @@ class GraphPixelView extends Ui.Drawable {
 							//			position_x+(xStep-graph_width/2),
 							//			position_y - (yStep-graph_height/2));
 							bufferdc.drawRectangle(
-								10 + self.locX+(xStep-self.width/2),
-								self.locY - (yStep-self.height/2),
+								xStep,
+								height - lastyStep,
 								2, 2
 							);
 						}
@@ -228,8 +228,8 @@ class GraphPixelView extends Ui.Drawable {
 			bufferdc.setColor(self.fontColor, Graphics.COLOR_TRANSPARENT);
 
 			if (HistoryPresent == null) {
-	        	bufferdc.drawText(self.locX,
-						self.locY + (position==1?(self.height/2 + 10):(-self.height/2-16)),
+	        	bufferdc.drawText(self.width / 2,
+						self.height - 8,
 						smallDigitalFont,
 						"--",
 						Graphics.TEXT_JUSTIFY_CENTER|Graphics.TEXT_JUSTIFY_VCENTER);
@@ -238,8 +238,8 @@ class GraphPixelView extends Ui.Drawable {
 	        }
 	        var value_label = parse_data_value(targetdatatype, HistoryPresent);
 	        var labelll = value_label.format("%d");
-			bufferdc.drawText(self.locX,
-						self.locY + (position==1?(self.height/2 + 10):(-self.height/2-16)),
+			bufferdc.drawText(self.width / 2,
+						self.height - 8,
 						smallDigitalFont,
 						labelll,
 						Graphics.TEXT_JUSTIFY_CENTER|Graphics.TEXT_JUSTIFY_VCENTER);
@@ -255,7 +255,8 @@ class GraphPixelView extends Ui.Drawable {
 		} finally {
 			buffer = null;
 			bufferdc = null;
-			dc.drawBitmap(0, 0, self.lastBuffer);
+			dc.drawBitmap(self.locX, self.locY, self.lastBuffer);
+			dc.drawRectangle(self.locX, self.locY, self.width, self.height);
 		}
     }
 

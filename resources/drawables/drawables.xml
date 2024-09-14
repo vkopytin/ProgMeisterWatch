@@ -1,17 +1,17 @@
 <drawables>
-    <bitmap id="LauncherIcon" filename="launcher_icon.png" />
-    <bitmap id="SecondHand" filename="secondhand.png"/>
-    <bitmap id="HourHand" filename="hourhand.png"/>
-    <bitmap id="MinuteHand" filename="minutehand.png"/>
-    <bitmap id="CompassNeedle" filename="compassneedle.png"/>
-    <bitmap id="BarometerScale" filename="barometerscale.png"/>
-    <bitmap id="GreenLCD" filename="greenlcd.png"/>
-    <bitmap id="lcdBackground" filename="lcd-background.png"/>
+    <bitmap id="LauncherIcon" filename="launcher_icon.png" packingFormat="png"/>
+    <bitmap id="SecondHand" filename="secondhand.png" packingFormat="png"/>
+    <bitmap id="HourHand" filename="hourhand.png" packingFormat="png"/>
+    <bitmap id="MinuteHand" filename="minutehand.png" packingFormat="png"/>
+    <bitmap id="CompassNeedle" filename="compassneedle.png" packingFormat="png"/>
+    <bitmap id="BarometerScale" filename="barometerscale.png" packingFormat="png"/>
+    <bitmap id="GreenLCD" filename="greenlcd.png" packingFormat="png"/>
+    <bitmap id="lcdBackground" filename="lcd-background.png" packingFormat="png"/>
 
     <drawable-list id="Background" background="0x5500aa">
-        <bitmap id="lcdBackground" filename="lcd-background.png"/>
-        <bitmap id="backgroundImage" filename="background.png"/>
+        <bitmap id="lcdBackground" filename="lcd-background.png" packingFormat="png"/>
+        <bitmap id="backgroundImage" filename="background.png" packingFormat="png"/>
     </drawable-list>
 
-    <bitmap id="DayNightArt" filename="day-night.png" />
+    <bitmap id="DayNightArt" filename="day-night.png" packingFormat="png" />
 </drawables>

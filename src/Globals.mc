@@ -106,6 +106,9 @@ function dispatchUpdateButtery() {
     var color = disabledColor;
     var solarStatusIcon = "5";
     var solarIntensity = stats.solarIntensity;
+    if (solarIntensity == null) {
+        return;
+    }
     var isSolarCharging = stats.solarIntensity > 0;
     if (solarIntensity > 49) {
         color = enabledColor;
