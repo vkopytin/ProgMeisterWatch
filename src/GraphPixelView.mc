@@ -256,7 +256,6 @@ class GraphPixelView extends Ui.Drawable {
 			buffer = null;
 			bufferdc = null;
 			dc.drawBitmap(self.locX, self.locY, self.lastBuffer);
-			dc.drawRectangle(self.locX, self.locY, self.width, self.height);
 		}
     }
 
