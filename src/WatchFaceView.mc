@@ -175,7 +175,7 @@ class WatchFaceView extends WatchUi.WatchFace {
 
         View.onUpdate(bufferdc);
 
-        drawWeatherIcon(bufferdc, 144, 4, 156, Graphics.COLOR_LT_GRAY);
+        drawWeatherIcon(bufferdc, 156, 4, 156, Graphics.COLOR_LT_GRAY);
         drawTemperature(bufferdc, 162, 14, false, Graphics.COLOR_LT_GRAY);
         drawLocation(bufferdc, 70, 140, 260, 260, Graphics.COLOR_LT_GRAY);
 
